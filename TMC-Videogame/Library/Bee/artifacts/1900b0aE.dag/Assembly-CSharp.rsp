@@ -358,6 +358,7 @@
 "Assets/scripts/AudioManager.cs"
 "Assets/scripts/GameManager.cs"
 "Assets/scripts/PlayerController.cs"
+"Assets/scripts/powerUp.cs"
 "Assets/scripts/spwner.cs"
 -langversion:9.0
 
