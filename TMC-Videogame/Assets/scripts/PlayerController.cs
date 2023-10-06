@@ -1,21 +1,49 @@
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public static float velocityMovment = 10f;
-    public float rotationSpeed = 100f;
+    //propiedades
+    [SerializeField]private float velocityMovment = 10f;
+    [SerializeField]private float rotationSpeed = 100f;
+    [SerializeField]private GameObject Item;
+    [SerializeField]private GameObject Disparo;
+    private GameManager gameManager;
     private Animator animator;
     private float timePowerUp = 10f;
     private float timeRemaining;
     private bool isPowerUpActive = false;
+
+    //getters y setters
+    public float VelocityPlayer {get => velocityMovment;set => velocityMovment = value;}
+    public bool statusPowerUp {get => isPowerUpActive;set => isPowerUpActive = value;}
+    public float timeForPowerUp { get => timePowerUp;set => timePowerUp = value;}
+
     void Start()
     {
         animator = GetComponent<Animator>();
         timeRemaining = timePowerUp;
+        gameManager = new GameManager();
     }
     void Update()
     {
- 
+        movePlayer();
+        if (Input.GetAxis("Fire1") != 0)
+        {
+            attack();
+        }
+        powerUpTime(isPowerUpActive);
+        Debug.Log("Estatus del power Up " + isPowerUpActive + "Tiempo del power Up " + timePowerUp + "Velocidad del personaje: " + velocityMovment);
+    }
+
+    private void attack()
+    {
+        Debug.Log("Debe atacar" + Input.GetAxis("Fire1"));
+        animator.SetBool("isAttack", true);
+    }
+
+    public void movePlayer()
+    {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
@@ -32,28 +60,18 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-
-        if (Input.GetAxis("Fire1") != 0)
-        {
-            Debug.Log("Debe atacar" + Input.GetAxis("Fire1"));
-            animator.SetBool("isAttack", true);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            Debug.Log("Power up");
-            animator.SetBool("isPowerUp", true);
-        }
-
         animator.SetFloat("velocityX", horizontal);
         animator.SetFloat("velocityY", vertical);
-
-        if (isPowerUpActive)
+    }
+    public void powerUpTime(bool statusPowerUp)
+    {
+        if (statusPowerUp)
         {
             timeRemaining -= Time.deltaTime;
             Debug.Log("Tiempo restante: " + Mathf.Round(timeRemaining));
             if (timeRemaining < 1)
             {
-                isPowerUpActive = false;
+                this.isPowerUpActive = false;
                 velocityMovment = 10f;
                 animator.speed = 1f;
             }
@@ -64,16 +82,12 @@ public class PlayerController : MonoBehaviour
             timeRemaining = timePowerUp;
         }
     }
-
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
-        if( collision.collider.CompareTag("speedBoost"))
+        if (collision.collider.CompareTag("punto"))
         {
-            velocityMovment = 20f;
-            animator.speed = 2f;
-            isPowerUpActive = true;
+            gameManager.PutosObtenidos ++;
             Destroy(collision.gameObject);
         }
     }
-
 }
