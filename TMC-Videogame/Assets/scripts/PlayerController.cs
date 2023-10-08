@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]private float rotationSpeed = 100f;
     [SerializeField]private GameObject Item;
     [SerializeField]private GameObject Disparo;
-    private GameManager gameManager;
+    [SerializeField]private GameManager gameManager;
     private Animator animator;
     private float timePowerUp = 10f;
     private float timeRemaining;
@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         timeRemaining = timePowerUp;
-        gameManager = new GameManager();
     }
     void Update()
     {
@@ -33,12 +32,10 @@ public class PlayerController : MonoBehaviour
             attack();
         }
         powerUpTime(isPowerUpActive);
-        Debug.Log("Estatus del power Up " + isPowerUpActive + "Tiempo del power Up " + timePowerUp + "Velocidad del personaje: " + velocityMovment);
     }
 
     private void attack()
     {
-        Debug.Log("Debe atacar" + Input.GetAxis("Fire1"));
         animator.SetBool("isAttack", true);
     }
 
@@ -68,7 +65,7 @@ public class PlayerController : MonoBehaviour
         if (statusPowerUp)
         {
             timeRemaining -= Time.deltaTime;
-            Debug.Log("Tiempo restante: " + Mathf.Round(timeRemaining));
+            gameManager.powerUpTime(timeRemaining);
             if (timeRemaining < 1)
             {
                 this.isPowerUpActive = false;
@@ -84,9 +81,10 @@ public class PlayerController : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
+
         if (collision.collider.CompareTag("punto"))
         {
-            gameManager.PutosObtenidos ++;
+            gameManager.PutosObtenidos = gameManager.PutosObtenidos + 1;
             Destroy(collision.gameObject);
         }
     }
