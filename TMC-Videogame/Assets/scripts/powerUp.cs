@@ -21,15 +21,5 @@ public class powerUp : MonoBehaviour
     {
         
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.CompareTag("Player"))
-        { 
-            playerController.timeForPowerUp = 5f;
-            playerController.VelocityPlayer = 20f;
-            animatorPlayer.speed = 2f;
-            playerController.statusPowerUp = true;
-            Destroy(gameObject);
-        }
-    }
+
 }
