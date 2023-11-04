@@ -6,37 +6,17 @@ public class PlayerController : MonoBehaviour
     //propiedades
     [SerializeField]private float velocityMovment = 10f;
     [SerializeField]private float rotationSpeed = 100f;
-    [SerializeField]private GameObject Item;
-    [SerializeField]private GameObject Disparo;
-    [SerializeField]private GameManager gameManager;
     private Animator animator;
-    private float timePowerUp = 10f;
-    private float timeRemaining;
-    private bool isPowerUpActive = false;
 
     //getters y setters
-    public float VelocityPlayer {get => velocityMovment;set => velocityMovment = value;}
-    public bool statusPowerUp {get => isPowerUpActive;set => isPowerUpActive = value;}
-    public float timeForPowerUp { get => timePowerUp;set => timePowerUp = value;}
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        timeRemaining = timePowerUp;
     }
     void Update()
     {
         movePlayer();
-        if (Input.GetAxis("Fire1") != 0)
-        {
-            attack();
-        }
-        powerUpTime(isPowerUpActive);
-    }
-
-    private void attack()
-    {
-        animator.SetBool("isAttack", true);
     }
 
     public void movePlayer()
@@ -59,33 +39,5 @@ public class PlayerController : MonoBehaviour
         }
         animator.SetFloat("velocityX", horizontal);
         animator.SetFloat("velocityY", vertical);
-    }
-    public void powerUpTime(bool statusPowerUp)
-    {
-        if (statusPowerUp)
-        {
-            timeRemaining -= Time.deltaTime;
-            gameManager.powerUpTime(timeRemaining);
-            if (timeRemaining < 1)
-            {
-                this.isPowerUpActive = false;
-                velocityMovment = 10f;
-                animator.speed = 1f;
-            }
-
-        }
-        else
-        {
-            timeRemaining = timePowerUp;
-        }
-    }
-    void OnCollisionEnter(Collision collision)
-    {
-
-        if (collision.collider.CompareTag("punto"))
-        {
-            gameManager.PutosObtenidos = gameManager.PutosObtenidos + 1;
-            Destroy(collision.gameObject);
-        }
     }
 }
