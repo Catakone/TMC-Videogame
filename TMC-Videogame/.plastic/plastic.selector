@@ -1,0 +1,4 @@
+repository "TMC-Videogame@LeonelRQ@cloud"
+  path "/"
+    br "/main"
+    co "/main"
