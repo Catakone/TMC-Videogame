@@ -6,11 +6,12 @@ TagManager:
   tags:
   - speedBoost
   - punto
+  - GameManager
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - 
